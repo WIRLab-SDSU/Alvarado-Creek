@@ -1,7 +1,6 @@
 % Define multiple pairs of cleaning dates
 load('2024_first_100.mat')
-% we can make some commentary about the degree of fouling wet seasons vs
-% dry seasons 
+
 % manually input dates
 cleaning_dates = split.CDOM_2024;
 
