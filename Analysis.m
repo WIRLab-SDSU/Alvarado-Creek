@@ -50,14 +50,13 @@ usgsOutputName = "USGS_2025";
 analysisFolder = string(analysisYear);
 
 % Code paths
-addpath("/MATLAB Drive/sunflower_v2/ Code and Scripts");
-addpath("/MATLAB Drive/sunflower_v2/Test Codes");
-addpath("/MATLAB Drive/sunflower_v1/Correction Analysis/Codes");
+addpath("ProjectAlvaradoCreek/data");
+addpath("ProjectAlvaradoCreek/Dependencies");;
 
 % Baseline/config files
-first100File2024 = "2024_first_100.mat";
-last100File2025  = "/MATLAB Drive/Creek Analysis/Sunflower/put_data_here/dec2024_last_100.mat";
-dataFile2025     = "/MATLAB Drive/Creek Analysis/Sunflower/put_data_here/2025data.mat";
+first100File2024 = "/ProjectAlvaradoCreek/data2024_first_100.mat";
+last100File2025  = "/ProjectAlvaradoCreek/data/dec2024_last_100.mat";
+dataFile2025     = "/ProjectAlvaradoCreek/data/2025data.mat";
 
 %% -------------------- SET UP ANALYSIS FOLDER --------------------
 
