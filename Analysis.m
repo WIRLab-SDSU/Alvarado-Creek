@@ -16,9 +16,8 @@ USGS_data = importUSGS("gage_height_jan-sep.csv"); % replace USGS.csv with path 
 %%
 save("USGS_data","USGS_data");
 %%
-processUSGSData(USGS_data, "USGS_2025"); % split USGS into months, name it something that makes sense, save it as .mat
+processUSGSData(USGS_data, "USGS_2025"); % split USGS into months, save it as .mat
 %%
-% How will this script handle data that crosses years? 
 %%
 %%% Importing and processing WQL data %%%
 %%
@@ -52,7 +51,6 @@ final_params = table(trp_final,cdom_final);
 saveerrorstructures
 %%
 %%% Spliting WQL data into months for downstream analysis 
-% change x to how many months are included in the data set
 wql_monthsets = split_months(t_wql, trp_final, cdom_final, temp, 12);
 %%
 % Save the monthly sets we need for the rest of the analysis in a .mat file
@@ -114,18 +112,6 @@ save("All_Params", "t_usgs", "t_wql", "temp", "cdom", "trp", "w_lvl");
 %%
 get_raw_stats % needs to be updated 
 
-%%
-% Consider snapping 
-% Peak timing uncertainty 
-% SNR how pronounced the sinusoid is 
-% Robust SNR how noisy the signal is around the sinudoid
-% We are going to smooth tho 
-% Here it becomes a classification problem !!
-
-% We might actually be able to implement a simple classification schema
-% based on:
-% order of detected peaks, number of detected peaks, and SNR
-% We can try two versions, one with smoothing, and one without 
 %%
 % Save stat tables
 save("Peak_Stats.mat","PstatsTbl");
