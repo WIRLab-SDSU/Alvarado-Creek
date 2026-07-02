@@ -1,44 +1,43 @@
-function [cdom_final, cdom_outputs] = detrendCDOM( ...
-    t_wql, temp_corrected_cdom, cleaning_dates, cdom_first_100, outFile)
+function [cleaned_data, outputs] = detrendParameter(data, t, cleaning_dates, baseline_value, outFile)
 
-%DETRENDCDOM Apply segment-wise detrending/cleaning to corrected CDOM.
+%DETRENDPARAMETER Apply segment-wise cleaning/detrending to one parameter.
 %
 % Inputs
-%   t_wql               - WQL datetime vector
-%   temp_corrected_cdom - temperature-corrected CDOM vector
-%   cleaning_dates      - N x 2 datetime array of cleaning start/end dates
-%   cdom_first_100      - first 100 baseline CDOM values
-%   outFile             - output file name or prefix
+%   data           - corrected parameter data, e.g. temp_corrected_cdom
+%   t              - datetime vector, e.g. t_wql
+%   cleaning_dates - N x 2 datetime array of cleaning date pairs
+%   baseline_value - scalar baseline value used by clean_parameter_segments
+%   outFile        - output file prefix/name
 %
 % Outputs
-%   cdom_final          - cleaned CDOM result
-%   cdom_outputs        - structure containing diagnostics and intermediate outputs
+%   cleaned_data   - final cleaned parameter
+%   outputs        - structure containing diagnostics
 
     arguments
-        t_wql
-        temp_corrected_cdom
+        data
+        t
         cleaning_dates
-        cdom_first_100
-        outFile string = "cdom_result_report"
+        baseline_value
+        outFile string = "cleaned_parameter"
     end
 
-    data = temp_corrected_cdom;
-    data_x = t_wql;
+    if ~isscalar(baseline_value)
+        baseline_value = mean(baseline_value, "omitnan");
+    end
 
-    first_last100 = mean(cdom_first_100, "omitnan");
+    [cleaned_data, p_array, residuals_array, last_100_array, ...
+        error_structures, y_factors, value_range] = ...
+        clean_parameter_segments(data, t, cleaning_dates, baseline_value, outFile);
 
-    [cdom_final, cdom_p_array, cdom_residuals_array, cdom_last_100_array, ...
-        cdom_error_structures, cdom_y_factors, cdom_range] = ...
-        clean_parameter_segments(data, data_x, cleaning_dates, first_last100, outFile);
+    outputs = struct();
 
-    cdom_outputs = struct();
-
-    cdom_outputs.p_array = cdom_p_array;
-    cdom_outputs.residuals_array = cdom_residuals_array;
-    cdom_outputs.last_100_array = cdom_last_100_array;
-    cdom_outputs.error_structures = cdom_error_structures;
-    cdom_outputs.y_factors = cdom_y_factors;
-    cdom_outputs.range = cdom_range;
-    cdom_outputs.cleaning_dates = cleaning_dates;
-    cdom_outputs.first_last100 = first_last100;
+    outputs.p_array = p_array;
+    outputs.residuals_array = residuals_array;
+    outputs.last_100_array = last_100_array;
+    outputs.error_structures = error_structures;
+    outputs.y_factors = y_factors;
+    outputs.value_range = value_range;
+    outputs.cleaning_dates = cleaning_dates;
+    outputs.baseline_value = baseline_value;
+    outputs.outFile = outFile;
 end
